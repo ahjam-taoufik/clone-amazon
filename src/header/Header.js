@@ -3,7 +3,18 @@ import "./Header.css";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Link } from "react-router-dom";
+import { useStateValue } from "./../StateProvider";
+import { signOut } from "firebase/auth";
+import { auth } from "../login/Config";
 const Header = () => {
+  const [{ basket, user }, dispatch] = useStateValue();
+
+  const HandleAuthentication=()=>{
+     if(user){
+       signOut(auth)
+     }
+  }
+
   return (
     <div className="header">
       <Link to="/">
@@ -19,10 +30,15 @@ const Header = () => {
       </div>
 
       <div className="header__nav">
-        <div className="header__option">
-          <span className="header__optionLineOne">Hello Guest</span>
-          <span className="header__optionLineTwo">SignIn</span>
-        </div>
+        <Link to="/login">
+          <div onClick={HandleAuthentication} className="header__option">
+            <span className="header__optionLineOne">Hello {!user ? "Guest" : user.email}</span>
+            <span className="header__optionLineTwo">
+              {user ? "Signt Out" : "Sign In"}
+            </span>
+          </div>
+        </Link>
+
         <div className="header__option">
           <span className="header__optionLineOne">Return</span>
           <span className="header__optionLineTwo">& Order</span>
@@ -32,12 +48,14 @@ const Header = () => {
           <span className="header__optionLineTwo">Prime</span>
         </div>
 
-          <Link to="checkout">
-        <div className="header__optionBasket">
+        <Link to="checkout">
+          <div className="header__optionBasket">
             <ShoppingBasketIcon />
-            <span className="header__optionLineTwo header__basketCount">0</span>
-        </div>
-          </Link>
+            <span className="header__optionLineTwo header__basketCount">
+              {basket?.length}
+            </span>
+          </div>
+        </Link>
       </div>
     </div>
   );

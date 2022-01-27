@@ -6,7 +6,7 @@ function Product({ id, title, image, price, rating }) {
   // const [state, dispatch] = useStateValue();
   // console.log(state.basket);
   const [{basket}, dispatch] = useStateValue();
-  console.log(basket);
+  console.log("this is basket from Product Component : ", basket);
 
   const addToBasket = () => {
     dispatch({
@@ -33,7 +33,7 @@ function Product({ id, title, image, price, rating }) {
           {Array(rating)
             .fill()
             .map((_, i) => (
-              <p>🌟</p>
+              <p key={i}>🌟</p>
             ))}
         </div>
       </div>
